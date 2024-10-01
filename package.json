@@ -1,6 +1,6 @@
 {
   "name": "@bldrs-ai/conway-web-ifc-adapter",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "Web-Ifc-Shim",
   "main": "ifc_api.js",
   "scripts": {
