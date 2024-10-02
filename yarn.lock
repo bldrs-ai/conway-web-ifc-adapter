@@ -2,9 +2,10 @@
 # yarn lockfile v1
 
 
-"@bldrs-ai/conway@./bldrs-ai-conway-0.1.633.tgz":
-  version "0.1.632"
-  resolved "./bldrs-ai-conway-0.1.633.tgz#5dbc039cb085928bc341db265aca3c84a5e94d41"
+"@bldrs-ai/conway@0.1.651":
+  version "0.1.651"
+  resolved "https://npm.pkg.github.com/download/@bldrs-ai/conway/0.1.651/5ad68a71ad0d67651e3ea06543189a9fde230ce1#5ad68a71ad0d67651e3ea06543189a9fde230ce1"
+  integrity sha512-Oega1vLUFKxtYa5ZAgDHz+Qq3BSm0+qbQI9xzRtSPtLMjfG5NNkII3HX3DH9FobAOH7n+B47sUUmFWr3Gsg9Cw==
   dependencies:
     buffer "^6.0.3"
     gl-matrix "^3.4.3"
@@ -12,7 +13,7 @@
     smart-buffer "^4.2.0"
     yargs "^17.7.1"
 
-"@types/node@^22.5.5":
+"@types/node@22.5.5":
   version "22.5.5"
   resolved "https://registry.yarnpkg.com/@types/node/-/node-22.5.5.tgz#52f939dd0f65fc552a4ad0b392f3c466cc5d7a44"
   integrity sha512-Xjs4y5UPO/CLdzpgR6GirZJx36yScjh73+2NlLlkFRSoQN8B0DpfXPdZGnvVmLRLOsqDpOfTNv7D9trgGhmOIA==
@@ -126,7 +127,7 @@ strip-ansi@^6.0.0, strip-ansi@^6.0.1:
   dependencies:
     ansi-regex "^5.0.1"
 
-typescript@^5.6.2:
+typescript@5.6.2:
   version "5.6.2"
   resolved "https://registry.yarnpkg.com/typescript/-/typescript-5.6.2.tgz#d1de67b6bef77c41823f822df8f0b3bcff60a5a0"
   integrity sha512-NW8ByodCSNCwZeghjN3o+JX5OFH0Ojg6sadjEKY4huZ52TqbJTJnDo5+Tw98lSy63NZvi4n+ez5m2u5d4PkZyw==

@@ -10,7 +10,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@bldrs-ai/conway": "0.1.651",
+  "@bldrs-ai/conway": "0.1.651",
     "@types/node": "22.5.5",
     "typescript": "5.6.2"
   }
