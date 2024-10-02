@@ -1,12 +1,15 @@
 {
   "name": "@bldrs-ai/conway-web-ifc-adapter",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Web-Ifc-Shim",
   "main": "ifc_api.js",
   "scripts": {
     "build": "tsc --build",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
+  "files": [
+    "./compiled/**/*"
+  ],
   "author": "",
   "license": "ISC",
   "dependencies": {
