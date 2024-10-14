@@ -2,10 +2,9 @@
 # yarn lockfile v1
 
 
-"@bldrs-ai/conway@0.1.651":
-  version "0.1.651"
-  resolved "https://npm.pkg.github.com/download/@bldrs-ai/conway/0.1.651/5ad68a71ad0d67651e3ea06543189a9fde230ce1#5ad68a71ad0d67651e3ea06543189a9fde230ce1"
-  integrity sha512-Oega1vLUFKxtYa5ZAgDHz+Qq3BSm0+qbQI9xzRtSPtLMjfG5NNkII3HX3DH9FobAOH7n+B47sUUmFWr3Gsg9Cw==
+"@bldrs-ai/conway@./bldrs-ai-conway-0.1.670.tgz":
+  version "0.1.670"
+  resolved "./bldrs-ai-conway-0.1.670.tgz#3538df2b625f1a582086582fa3dd51c4b4f84556"
   dependencies:
     buffer "^6.0.3"
     gl-matrix "^3.4.3"
