@@ -1,6 +1,6 @@
 {
   "name": "@bldrs-ai/conway-web-ifc-adapter",
-  "version": "0.1.001",
+  "version": "0.1.010",
   "description": "Web-Ifc-Shim",
   "main": "ifc_api.js",
   "scripts": {
@@ -10,7 +10,11 @@
   "files": [
     "./compiled/**/*"
   ],
-  "author": "",
+  "author": "bldrs.ai",
+  "repository": "https://github.com/bldrs-ai/conway-web-ifc-adapter",
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com"
+  },
   "license": "ISC",
   "dependencies": {
    "@bldrs-ai/conway": "0.1.689",
