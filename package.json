@@ -17,7 +17,7 @@
   },
   "license": "AGPL-3.0",
   "dependencies": {
-    "@bldrs-ai/conway": "0.3.695",
+    "@bldrs-ai/conway": "0.4.716",
     "@types/node": "22.5.5",
     "typescript": "5.6.2"
   }
