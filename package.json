@@ -12,12 +12,9 @@
   ],
   "author": "bldrs.ai",
   "repository": "https://github.com/bldrs-ai/conway-web-ifc-adapter",
-  "publishConfig": {
-    "registry": "https://npm.pkg.github.com"
-  },
   "license": "AGPL-3.0",
   "dependencies": {
-    "@bldrs-ai/conway": "0.4.716",
+    "@bldrs-ai/conway": "0.7.727",
     "@types/node": "22.5.5",
     "typescript": "5.6.2"
   }
