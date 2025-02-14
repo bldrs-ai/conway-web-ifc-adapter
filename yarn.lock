@@ -2,11 +2,12 @@
 # yarn lockfile v1
 
 
-"@bldrs-ai/conway@0.7.727":
-  version "0.7.727"
-  resolved "https://registry.yarnpkg.com/@bldrs-ai/conway/-/conway-0.7.727.tgz#8d54e76c29b21d2e9703213fcb21b62cbc7d5201"
-  integrity sha512-ZSvgZFwpkoR00UhY9RLTKJ0NRE8MhWyVAoZyYv04btqhf3eTHN7u5PqBRpXctHfUAC9DxRbPGuTYvVugLniLGw==
+"@bldrs-ai/conway@0.9.789":
+  version "0.9.789"
+  resolved "https://registry.yarnpkg.com/@bldrs-ai/conway/-/conway-0.9.789.tgz#1144e3fb84be9a5dfacbe7677a994f8a2295fd02"
+  integrity sha512-YER/6qNx5h58eeuNiuMX3Pr/0c319GoKpBQuYYkK6aBkFhklvWeMNk9oAl7wyAQvuxQKKHYIBOswZLE0ltDs7A==
   dependencies:
+    adm-zip "^0.5.16"
     buffer "^6.0.3"
     gl-matrix "^3.4.3"
     seedrandom "^3.0.5"
@@ -19,6 +20,11 @@
   integrity sha512-Xjs4y5UPO/CLdzpgR6GirZJx36yScjh73+2NlLlkFRSoQN8B0DpfXPdZGnvVmLRLOsqDpOfTNv7D9trgGhmOIA==
   dependencies:
     undici-types "~6.19.2"
+
+adm-zip@^0.5.16:
+  version "0.5.16"
+  resolved "https://registry.yarnpkg.com/adm-zip/-/adm-zip-0.5.16.tgz#0b5e4c779f07dedea5805cdccb1147071d94a909"
+  integrity sha512-TGw5yVi4saajsSEgz25grObGHEUaDrniwvA2qwSC060KfqGPdglhvPMA2lPIoxs3PQIItj2iag35fONcQqgUaQ==
 
 ansi-regex@^5.0.1:
   version "5.0.1"
