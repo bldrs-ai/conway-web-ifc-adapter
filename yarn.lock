@@ -2,10 +2,10 @@
 # yarn lockfile v1
 
 
-"@bldrs-ai/conway@0.12.800":
-  version "0.12.800"
-  resolved "https://registry.yarnpkg.com/@bldrs-ai/conway/-/conway-0.12.800.tgz#e1e69893f81566b732af2ef808a93007106c6c6b"
-  integrity sha512-+DhGa1MzpoV4Xbt9enB4PchAX/832kOfHnxhkduuYQMF+JU5KoFzcByY9okZMAdEpIHrgzpx6N4altvTm5hTcg==
+"@bldrs-ai/conway@0.13.802":
+  version "0.13.802"
+  resolved "https://registry.yarnpkg.com/@bldrs-ai/conway/-/conway-0.13.802.tgz#2f5ec06575ceba17aefbf1d467342e358facea91"
+  integrity sha512-XaAlVbtNEk69MPPGd2K/gwlUCnN7yI4s1gu4LV70nViRT4UZ7P2kl6QMzqu1aBM6PYVHCctB8kbEsYzGqlYplA==
   dependencies:
     adm-zip "^0.5.16"
     buffer "^6.0.3"
