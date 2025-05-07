@@ -1,6 +1,6 @@
 {
   "name": "@bldrs-ai/conway-web-ifc-adapter",
-  "version": "0.16.849",
+  "version": "0.21.911",
   "description": "web-ifc API adapter for Conway CAD engine",
   "main": "ifc_api.js",
   "scripts": {
@@ -14,7 +14,7 @@
   "repository": "https://github.com/bldrs-ai/conway-web-ifc-adapter",
   "license": "AGPL-3.0",
   "dependencies": {
-    "@bldrs-ai/conway": "0.16.849",
+    "@bldrs-ai/conway": "0.21.911",
     "@types/node": "22.5.5",
     "gl-matrix": "^3.4.3",
     "typescript": "5.6.2"
