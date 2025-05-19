@@ -16,7 +16,7 @@
   "dependencies": {
     "@bldrs-ai/conway": "0.22.921",
     "@types/node": "22.5.5",
-    "gl-matrix": "^3.4.3",
+    "gl-matrix": "3.4.3",
     "typescript": "5.6.2"
   }
 }
