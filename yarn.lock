@@ -2,10 +2,10 @@
 # yarn lockfile v1
 
 
-"@bldrs-ai/conway@0.21.915":
-  version "0.21.915"
-  resolved "https://registry.yarnpkg.com/@bldrs-ai/conway/-/conway-0.21.915.tgz#daffd1d6f66769a40eaab03445055bed0cec74e8"
-  integrity sha512-sz27nH6Hs0FUq7iigl+BgASBHLdHtL9tkuP4QnRBgOL2azNBCDZESOlP5zdeFJLJhifUnA9i14eBIHBDlTTmZw==
+"@bldrs-ai/conway@0.22.921":
+  version "0.22.921"
+  resolved "https://registry.yarnpkg.com/@bldrs-ai/conway/-/conway-0.22.921.tgz#c138a7a8b8b80f62206185cabdf76327d1fc91b5"
+  integrity sha512-oBkDHu/0GyYC33PIkeck3xWm9VxmMw1N8/xNf8Xjh1Vv8/CI95AZQEkXUaxT6BtJHepsQqcET2LhqoOcLFAGoQ==
   dependencies:
     seedrandom "3.0.5"
     three "^0.173.0"
