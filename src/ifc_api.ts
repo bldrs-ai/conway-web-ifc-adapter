@@ -504,6 +504,7 @@ export class IfcAPI {
     Logger.printStatistics(modelID)
   }
 
+
   /**
    *
    * @param modelID
@@ -703,4 +704,13 @@ export class IfcAPI {
     this.wasmPath = path
     this.isWasmPathAbsolute = absolute
   }
+
+  // Non web-ifc methods
+  /**
+   * 
+   * @param modelID 
+   */
+  getStatistics(modelID: number): any {
+    return Logger.getStatistics(modelID)
+  }  
 }
