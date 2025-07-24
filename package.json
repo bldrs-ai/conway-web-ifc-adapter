@@ -1,6 +1,6 @@
 {
   "name": "@bldrs-ai/conway-web-ifc-adapter",
-  "version": "0.23.940-1",
+  "version": "0.23.940-2",
   "description": "web-ifc API adapter for Conway CAD engine",
   "main": "ifc_api.js",
   "scripts": {

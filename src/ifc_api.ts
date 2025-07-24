@@ -706,10 +706,12 @@ export class IfcAPI {
   }
 
   // Non web-ifc methods
-  /**
-   * 
-   * @param modelID 
-   */
+  /** The conway version string like "0.23.940-WebMT" */
+  getConwayVersion(): string {
+    return versionString
+  }  
+
+  /** @see https://bldrs-ai.github.io/conway/classes/statistics_statistics.Statistics.html */
   getStatistics(modelID: number): any {
     return Logger.getStatistics(modelID)
   }  
