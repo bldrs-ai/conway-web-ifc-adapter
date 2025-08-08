@@ -715,4 +715,24 @@ export class IfcAPI {
   getStatistics(modelID: number): any {
     return Logger.getStatistics(modelID)
   }  
+
+  /**
+   * Gets the aggregated geometry from the loaded scene.
+   * 
+   * @param opts Options for geometry aggregation
+   *        • maxGeometrySize (bytes) – default 128 MiB before chunking
+   *        • includeSpaces   – include IfcSpace geometry (default false)
+   * @returns The aggregated geometry object
+   */
+  getAggregatedGeometry(opts: {
+    maxGeometrySize?: number;
+    includeSpaces?: boolean;
+  } = {}) {
+
+    return this.getPassthrough(0).getAggregatedGeometry(opts);
+  }
+
+  getWasmModule() {
+    return this.conwaywasm;
+  }
 }

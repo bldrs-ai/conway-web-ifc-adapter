@@ -1255,4 +1255,46 @@ export class IfcApiProxyAP214 implements IfcApiModelPassthrough {
 
     Logger.warning(`[CreateIfcGuidToExpressIdMapping]: Model ${this.modelID}: Shim - Unimplemented`)
   }
+
+  /**
+     * Gets the aggregated geometry from the loaded scene.
+     * 
+     * @param opts Options for geometry aggregation
+     *        • maxGeometrySize (bytes) – default 128 MiB before chunking
+     *        • includeSpaces   – include IfcSpace geometry (default false)
+     * @returns The aggregated geometry object
+     */
+    getAggregatedGeometry(opts: {
+      maxGeometrySize?: number;
+      includeSpaces?: boolean;
+    } = {}) {
+      /*const {
+        maxGeometrySize = 128 * 1024 * 1024, // 128 MiB
+        includeSpaces   = false,
+      } = opts;
+  
+      const scene = this.model[1] as IfcSceneBuilder;
+      if (!scene) {
+        throw new Error('getAggregatedGeometry: no SceneBuilder on this model.');
+      }
+  
+      // Aggregate native geometry
+      const aggregator = new GeometryAggregator(this.conwaywasm, {
+        maxGeometrySize,
+        outputSpaces: includeSpaces,
+      });
+      aggregator.append(scene);
+      const aggregated = aggregator.aggregateNative();
+  
+      if (aggregated.geometry.size() === 0) {
+        Logger.warning('[getAggregatedGeometry] No geometry found.');
+        return null;
+      }
+  
+      return aggregated;*/
+    }
+
+      getWasmModule() {
+    return this.wasmModule;
+  }
 }

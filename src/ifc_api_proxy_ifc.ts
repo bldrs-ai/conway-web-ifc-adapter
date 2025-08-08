@@ -29,6 +29,8 @@ import { FromRawLineData } from './ifc2x4_helper'
 import { shimIfcEntityMap, shimIfcEntityReverseMap } from './shim_schema_mapping'
 import { EntityTypesIfcCount } from '@bldrs-ai/conway/src/ifc/ifc4_gen/entity_types_ifc.gen'
 import { CanonicalMeshType } from '@bldrs-ai/conway'
+import  GeometryAggregator from '@bldrs-ai/conway/src/core/geometry_aggregator'
+// import GeometryConverter from '@bldrs-ai/conway/src/core/geometry_converter'
 
 /**
  * The proxy for IFC from the shim.
@@ -274,6 +276,10 @@ export class IfcApiProxyIfc implements IfcApiModelPassthrough {
     statistics?.setGeometryTime(executionTimeInMs)
     // eslint-disable-next-line no-magic-numbers
     statistics?.setGeometryMemory(scene.model.geometry.calculateGeometrySize() / (1024 * 1024))
+  }
+
+  getWasmModule() {
+    return this.wasmModule;
   }
 
 
@@ -1537,5 +1543,43 @@ export class IfcApiProxyIfc implements IfcApiModelPassthrough {
         this.ifcGuidMap.push(modelID, map)*/
 
     Logger.warning(`[CreateIfcGuidToExpressIdMapping]: Model ${this.modelID}: Shim - Unimplemented`)
+  }
+
+  /**
+   * Gets the aggregated geometry from the loaded scene.
+   * 
+   * @param opts Options for geometry aggregation
+   *        • maxGeometrySize (bytes) – default 128 MiB before chunking
+   *        • includeSpaces   – include IfcSpace geometry (default false)
+   * @returns The aggregated geometry object
+   */
+  getAggregatedGeometry(opts: {
+    maxGeometrySize?: number;
+    includeSpaces?: boolean;
+  } = {}) {
+    const {
+      maxGeometrySize = 128 * 1024 * 1024, // 128 MiB
+      includeSpaces   = false,
+    } = opts;
+
+    const scene = this.model[1] as IfcSceneBuilder;
+    if (!scene) {
+      throw new Error('getAggregatedGeometry: no SceneBuilder on this model.');
+    }
+
+    // Aggregate native geometry
+    const aggregator = new GeometryAggregator(this.conwaywasm, {
+      maxGeometrySize,
+      outputSpaces: includeSpaces,
+    });
+    aggregator.append(scene);
+    const aggregated = aggregator.aggregateNative();
+
+    if (aggregated.geometry.size() === 0) {
+      Logger.warning('[getAggregatedGeometry] No geometry found.');
+      return null;
+    }
+
+    return aggregated;
   }
 }
