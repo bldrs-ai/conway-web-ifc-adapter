@@ -1558,7 +1558,7 @@ export class IfcApiProxyIfc implements IfcApiModelPassthrough {
     includeSpaces?: boolean;
   } = {}) {
     const {
-      maxGeometrySize = 128 * 1024 * 1024, // 128 MiB
+      maxGeometrySize = null,//128 * 1024 * 1024, // 128 MiB
       includeSpaces   = false,
     } = opts;
 
@@ -1572,8 +1572,8 @@ export class IfcApiProxyIfc implements IfcApiModelPassthrough {
       maxGeometrySize,
       outputSpaces: includeSpaces,
     });
-    aggregator.append(scene);
-    const aggregated = aggregator.aggregateNative();
+    aggregator.appendInOrder(scene);
+    const aggregated = aggregator.aggregateNativeInOrder();
 
     if (aggregated.geometry.size() === 0) {
       Logger.warning('[getAggregatedGeometry] No geometry found.');
