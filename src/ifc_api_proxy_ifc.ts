@@ -689,6 +689,7 @@ export class IfcApiProxyIfc implements IfcApiModelPassthrough {
    */
   closeModel() {
     // Null operation.
+    // this.conwaywasm.destroy()
   }
 
   /**

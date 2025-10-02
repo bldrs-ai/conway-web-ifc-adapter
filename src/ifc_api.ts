@@ -483,7 +483,14 @@ export class IfcAPI {
    * @param modelID Model handle retrieved by OpenModel, model must not be closed
    */
   CloseModel(modelID: number) {
+    if (this.models.has(modelID) === false) {
+      Logger.error(`[CloseModel]: Model ${modelID} not found`)
+      return
+    }
+
+    Logger.info(`[CloseModel]: Closing model ${modelID}`)
     this.models.delete(modelID)
+    this.conwaywasm.destroy()
   }
 
   /**

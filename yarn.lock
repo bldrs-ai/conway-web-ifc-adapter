@@ -2,10 +2,10 @@
 # yarn lockfile v1
 
 
-"@bldrs-ai/conway@0.23.940":
-  version "0.23.940"
-  resolved "https://registry.yarnpkg.com/@bldrs-ai/conway/-/conway-0.23.940.tgz#5230c6bcac973cb9c0cc9f1b0c71b482f7d5d737"
-  integrity sha512-oP/FJaMXF5DXZpqNylEnd0U+gFMg7Vmlg3vdmxZO3RImQvSACjBgSOZG9OJeUO9AjvVLOdgFP88kUvJ7nqB6pA==
+"@bldrs-ai/conway@0.23.954":
+  version "0.23.954"
+  resolved "https://registry.yarnpkg.com/@bldrs-ai/conway/-/conway-0.23.954.tgz#86c01c57965cca513b729be19348a588043d70eb"
+  integrity sha512-1v/K3GvHgzsf/g62SQeFHWih7jPaRf8ZuSQgWDOtV1TDjJ1RJ0+jRhWtI4kdTX5QutviEYOsA1cctoDv6UNX7A==
   dependencies:
     seedrandom "3.0.5"
     three "^0.173.0"
@@ -13,7 +13,7 @@
 
 "@types/node@22.5.5":
   version "22.5.5"
-  resolved "https://registry.yarnpkg.com/@types/node/-/node-22.5.5.tgz#52f939dd0f65fc552a4ad0b392f3c466cc5d7a44"
+  resolved "https://registry.npmjs.org/@types/node/-/node-22.5.5.tgz"
   integrity sha512-Xjs4y5UPO/CLdzpgR6GirZJx36yScjh73+2NlLlkFRSoQN8B0DpfXPdZGnvVmLRLOsqDpOfTNv7D9trgGhmOIA==
   dependencies:
     undici-types "~6.19.2"
@@ -68,7 +68,7 @@ get-caller-file@^2.0.5:
 
 gl-matrix@3.4.3:
   version "3.4.3"
-  resolved "https://registry.yarnpkg.com/gl-matrix/-/gl-matrix-3.4.3.tgz#fc1191e8320009fd4d20e9339595c6041ddc22c9"
+  resolved "https://registry.npmjs.org/gl-matrix/-/gl-matrix-3.4.3.tgz"
   integrity sha512-wcCp8vu8FT22BnvKVPjXa/ICBWRq/zjFfdofZy1WSpQZpphblv12/bOQLBC1rMM7SGOFS9ltVmKOHil5+Ml7gA==
 
 is-fullwidth-code-point@^3.0.0:
@@ -109,12 +109,12 @@ three@^0.173.0:
 
 typescript@5.6.2:
   version "5.6.2"
-  resolved "https://registry.yarnpkg.com/typescript/-/typescript-5.6.2.tgz#d1de67b6bef77c41823f822df8f0b3bcff60a5a0"
+  resolved "https://registry.npmjs.org/typescript/-/typescript-5.6.2.tgz"
   integrity sha512-NW8ByodCSNCwZeghjN3o+JX5OFH0Ojg6sadjEKY4huZ52TqbJTJnDo5+Tw98lSy63NZvi4n+ez5m2u5d4PkZyw==
 
 undici-types@~6.19.2:
   version "6.19.8"
-  resolved "https://registry.yarnpkg.com/undici-types/-/undici-types-6.19.8.tgz#35111c9d1437ab83a7cdc0abae2f26d88eda0a02"
+  resolved "https://registry.npmjs.org/undici-types/-/undici-types-6.19.8.tgz"
   integrity sha512-ve2KP6f/JnbPBFyobGHuerC9g1FYGn/F8n1LWTwNxCEzd6IfqTwUQcNXgEtmmQ6DlRrC1hrSrBnCZPokRrDHjw==
 
 wrap-ansi@^7.0.0:
