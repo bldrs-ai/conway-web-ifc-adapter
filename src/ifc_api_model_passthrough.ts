@@ -1,4 +1,4 @@
-import { FlatMesh, IfcGeometry, RawLineData, Vector } from './ifc_api'
+import { FlatMesh, IfcGeometry, RawLineData, SerializedIfcElementProperties, Vector } from './ifc_api'
 import { PropertiesPassthrough } from './properties_passthrough'
 
 
@@ -21,6 +21,7 @@ export interface IfcApiModelPassthrough {
     maxGeometrySize?: number;
     includeSpaces?: boolean;
   }) :any
+  serializeGeometryProperties(): Promise<Record<number, SerializedIfcElementProperties>>
   getWasmModule();
   
 }

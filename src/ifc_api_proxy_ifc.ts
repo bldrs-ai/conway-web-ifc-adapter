@@ -13,6 +13,7 @@ import {
   Loadersettings,
   PlacedGeometry,
   RawLineData,
+  SerializedIfcElementProperties,
   Vector,
 } from './ifc_api'
 import { IfcApiModelPassthrough } from './ifc_api_model_passthrough'
@@ -840,7 +841,7 @@ export class IfcApiProxyIfc implements IfcApiModelPassthrough {
 
         if (entity?.localID !== void 0) {
           if (entity?.expressID !== void 0) {
-            const mesh = meshMap.get(entity.localID)
+            const mesh = meshMap.get(entity.expressID)
             if (mesh !== void 0) {
               // set color
               const color = {
@@ -860,7 +861,7 @@ export class IfcApiProxyIfc implements IfcApiModelPassthrough {
               mesh[0].push(singlePlacedGeometry)
               mesh[1].geometries = mesh[0]
 
-              meshMap.set(entity.localID, [mesh[0], mesh[1]])
+              meshMap.set(entity.expressID, [mesh[0], mesh[1]])
 
 
             } else {
@@ -906,14 +907,14 @@ export class IfcApiProxyIfc implements IfcApiModelPassthrough {
                 expressID: entity.expressID,
               }
 
-              meshMap.set(entity.localID, [vectorOfPlacedGeometry_, singleFlatMesh])
+              meshMap.set(entity.expressID, [vectorOfPlacedGeometry_, singleFlatMesh])
             }
           }
         }
       }
     }
 
-    meshMap.forEach((mesh, productLocalID) => {
+    meshMap.forEach((mesh, productExpressID) => {
 
       vectorFlatMesh.push(mesh[1])
 
@@ -1086,7 +1087,7 @@ export class IfcApiProxyIfc implements IfcApiModelPassthrough {
 
         if (entity?.localID !== void 0) {
           if (entity?.expressID !== void 0) {
-            const mesh = meshMap.get(entity.localID)
+            const mesh = meshMap.get(entity.expressID)
             if (mesh !== void 0) {
               // set color
               const color = {
@@ -1106,7 +1107,7 @@ export class IfcApiProxyIfc implements IfcApiModelPassthrough {
               mesh[0].push(singlePlacedGeometry)
               mesh[1].geometries = mesh[0]
 
-              meshMap.set(entity.localID, [mesh[0], mesh[1]])
+              meshMap.set(entity.expressID, [mesh[0], mesh[1]])
 
 
             } else {
@@ -1152,19 +1153,83 @@ export class IfcApiProxyIfc implements IfcApiModelPassthrough {
                 expressID: entity.expressID,
               }
 
-              meshMap.set(entity.localID, [vectorOfPlacedGeometry_, singleFlatMesh])
+              meshMap.set(entity.expressID, [vectorOfPlacedGeometry_, singleFlatMesh])
             }
           }
         }
       }
 
 
-      meshMap.forEach((mesh, productLocalID) => {
+      meshMap.forEach((mesh, productExpressID) => {
 
         vectorFlatMesh.push(mesh[1])
 
         meshCallback(mesh[1])
       })
+    }
+  }
+
+  /**
+   * Serialize all available property data for geometry already loaded into memory.
+   */
+  async serializeGeometryProperties(): Promise<Record<number, SerializedIfcElementProperties>> {
+    const [model, , meshMap, ] = this.model
+
+    const serialized: Record<number, SerializedIfcElementProperties> = {}
+
+    const tasks: Array<Promise<void>> = []
+
+    meshMap.forEach((_, expressID) => {
+      tasks.push((async () => {
+        try {
+          serialized[expressID] = await this.serializeElementProperties(model, expressID)
+        } catch (error) {
+          const message = error instanceof Error ? error.message : String(error)
+          Logger.error(`[serializeGeometryProperties] Failed to serialize element ${expressID}: ${message}`)
+        }
+      })())
+    })
+
+    await Promise.all(tasks)
+
+    return serialized
+  }
+
+  private async serializeElementProperties(
+    model: IfcStepModel,
+    expressID: number,
+  ): Promise<SerializedIfcElementProperties> {
+    const element = model.getElementByExpressID(expressID)
+
+    let globalID: string | undefined
+    const globalIdCandidate = (element as any)?.GlobalId ?? (element as any)?.globalID
+    if (globalIdCandidate !== void 0) {
+      if (typeof globalIdCandidate === 'string') {
+        globalID = globalIdCandidate
+      } else if (typeof (globalIdCandidate as any).value === 'string') {
+        globalID = (globalIdCandidate as any).value
+      }
+    }
+
+    const flattenedLine = this.getLine(expressID, true)
+
+    const results = await Promise.allSettled([
+      this.properties.getItemProperties(expressID, true),
+      this.properties.getPropertySets(expressID, true),
+      this.properties.getTypeProperties(expressID, true),
+      this.properties.getMaterialsProperties(expressID, true),
+    ])
+
+    const [itemProperties, propertySets, typeProperties, materialProperties] = results
+
+    return {
+      expressID,
+      globalID,
+      flattenedLine,
+      itemProperties: itemProperties.status === 'fulfilled' ? itemProperties.value : undefined,
+      propertySets: propertySets.status === 'fulfilled' ? propertySets.value : undefined,
+      typeProperties: typeProperties.status === 'fulfilled' ? typeProperties.value : undefined,
+      materialProperties: materialProperties.status === 'fulfilled' ? materialProperties.value : undefined,
     }
   }
 
@@ -1313,7 +1378,7 @@ export class IfcApiProxyIfc implements IfcApiModelPassthrough {
 
         if (entity?.localID !== void 0) {
           if (entity?.expressID !== void 0) {
-            const mesh = meshMap.get(entity.localID)
+            const mesh = meshMap.get(entity.expressID)
             if (mesh !== void 0) {
               // set color
               const color = {
@@ -1333,7 +1398,7 @@ export class IfcApiProxyIfc implements IfcApiModelPassthrough {
               mesh[0].push(singlePlacedGeometry)
               mesh[1].geometries = mesh[0]
 
-              meshMap.set(entity.localID, [mesh[0], mesh[1]])
+              meshMap.set(entity.expressID, [mesh[0], mesh[1]])
 
 
             } else {
@@ -1379,13 +1444,13 @@ export class IfcApiProxyIfc implements IfcApiModelPassthrough {
                 expressID: entity.expressID,
               }
 
-              meshMap.set(entity.localID, [vectorOfPlacedGeometry_, singleFlatMesh])
+              meshMap.set(entity.expressID, [vectorOfPlacedGeometry_, singleFlatMesh])
             }
           }
         }
       }
 
-      meshMap.forEach((mesh, productLocalID) => {
+      meshMap.forEach((mesh, productExpressID) => {
 
         vectorFlatMesh.push(mesh[1])
       })

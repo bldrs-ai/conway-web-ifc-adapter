@@ -11,6 +11,7 @@ import {
   Loadersettings,
   PlacedGeometry,
   RawLineData,
+  SerializedIfcElementProperties,
   Vector,
 } from './ifc_api'
 import { IfcApiModelPassthrough } from './ifc_api_model_passthrough'
@@ -1292,6 +1293,11 @@ export class IfcApiProxyAP214 implements IfcApiModelPassthrough {
       }
   
       return aggregated;*/
+    }
+
+    async serializeGeometryProperties(): Promise<Record<number, SerializedIfcElementProperties>> {
+      Logger.warning('[serializeGeometryProperties]: AP214 Shim - Unimplemented')
+      return {}
     }
 
       getWasmModule() {

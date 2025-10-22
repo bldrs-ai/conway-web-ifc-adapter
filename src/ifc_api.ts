@@ -76,6 +76,16 @@ export interface IfcGeometry {
   GetIndexDataSize(): number
 }
 
+export type SerializedIfcElementProperties = {
+  expressID: number
+  globalID?: string
+  flattenedLine: unknown
+  itemProperties?: unknown
+  propertySets?: unknown[]
+  typeProperties?: unknown[]
+  materialProperties?: unknown[]
+}
+
 /**
  * @return {number} current time in ms
  */
@@ -610,6 +620,25 @@ export class IfcAPI {
       },
     }
     return vectorOfFlatMesh
+  }
+
+  /**
+   * Serializes the geometry-linked IFC properties for a loaded model.
+   *
+   * @param modelID handle retrieved by OpenModel
+   * @return {Promise<Record<number, SerializedIfcElementProperties>>}
+   */
+  async SerializeGeometryProperties(
+      modelID: number,
+  ): Promise<Record<number, SerializedIfcElementProperties>> {
+    const result = this.models.get(modelID)
+
+    if (result === void 0) {
+      Logger.error('[SerializeGeometryProperties]: model === undefined')
+      return {}
+    }
+
+    return await result.serializeGeometryProperties()
   }
 
   /**
