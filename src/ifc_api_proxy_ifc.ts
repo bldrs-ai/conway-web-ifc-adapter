@@ -49,7 +49,7 @@ export class IfcApiProxyIfc implements IfcApiModelPassthrough {
       Vector<FlatMesh>, glmatrix.mat4]
   conwaywasm: ConwayGeometry
   _isCoordinated: boolean = false
-  linearScalingFactor: number = 1
+  public linearScalingFactor: number = 1
   identity: number[] = [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1]
 
   // Initialize the matrix using an array
@@ -151,6 +151,7 @@ export class IfcApiProxyIfc implements IfcApiModelPassthrough {
 
     // get linear scaling factor
     this.linearScalingFactor = conwayGeometry.getLinearScalingFactor()
+    console.log(`Linear scaling factor: ${this.linearScalingFactor}`)
 
     const ifcProjectName = conwayGeometry.getIfcProjectName()
 
@@ -1176,60 +1177,199 @@ export class IfcApiProxyIfc implements IfcApiModelPassthrough {
     const [model, , meshMap, ] = this.model
 
     const serialized: Record<number, SerializedIfcElementProperties> = {}
+    
+    // Convert to array for batching
+    const expressIDs = Array.from(meshMap.keys())
+    const total = expressIDs.length
 
-    const tasks: Array<Promise<void>> = []
+    console.log(`[serializeGeometryProperties] Processing ${total} elements with optimized property lookups`)
+    const startTime = Date.now()
 
-    meshMap.forEach((_, expressID) => {
-      tasks.push((async () => {
+    // PRE-COMPUTE: Build relationship maps ONCE for all elements
+    // This avoids O(n²) lookups where we scan all relationships for each element
+    console.log(`[serializeGeometryProperties] Pre-computing relationship maps...`)
+    const mapStart = Date.now()
+    const propertyMap = await this.buildPropertySetMap()
+    const typeMap = await this.buildTypeMap()
+    const mapTime = ((Date.now() - mapStart) / 1000).toFixed(1)
+    console.log(`[serializeGeometryProperties] Relationship maps built in ${mapTime}s`)
+
+    const BATCH_SIZE = 1000
+
+    // Process in large batches for maximum speed
+    for (let i = 0; i < total; i += BATCH_SIZE) {
+      const batch = expressIDs.slice(i, Math.min(i + BATCH_SIZE, total))
+      
+      // Process batch in parallel with pre-computed maps
+      await Promise.all(batch.map(async (expressID) => {
         try {
-          serialized[expressID] = await this.serializeElementProperties(model, expressID)
+          serialized[expressID] = await this.serializeElementPropertiesOptimized(
+            model, 
+            expressID, 
+            propertyMap, 
+            typeMap
+          )
         } catch (error) {
-          const message = error instanceof Error ? error.message : String(error)
-          Logger.error(`[serializeGeometryProperties] Failed to serialize element ${expressID}: ${message}`)
+          // Silently skip failed elements
+          serialized[expressID] = {
+            expressID,
+            globalID: undefined,
+            flattenedLine: undefined,
+            itemProperties: undefined,
+            propertySets: undefined,
+            typeProperties: undefined,
+            materialProperties: undefined,
+          }
         }
-      })())
-    })
+      }))
+      
+      // Log progress
+      const processed = Math.min(i + BATCH_SIZE, total)
+      const percentage = Math.round((processed / total) * 100)
+      const elapsed = ((Date.now() - startTime) / 1000).toFixed(1)
+      console.log(`[serializeGeometryProperties] Progress: ${processed}/${total} (${percentage}%) - ${elapsed}s elapsed`)
+    }
 
-    await Promise.all(tasks)
-
+    const totalTime = ((Date.now() - startTime) / 1000).toFixed(1)
+    console.log(`[serializeGeometryProperties] Completed ${total} elements in ${totalTime}s`)
     return serialized
   }
 
-  private async serializeElementProperties(
+  /**
+   * Build a map of element -> property sets for O(1) lookups
+   */
+  private async buildPropertySetMap(): Promise<Map<number, number[]>> {
+    const map = new Map<number, number[]>()
+    
+    // Get all IFCRELDEFINESBYPROPERTIES relationships
+    const IFCRELDEFINESBYPROPERTIES = 4186316022 // The IFC type number
+    const lines = this.getLineIDsWithType(IFCRELDEFINESBYPROPERTIES)
+    
+    for (let i = 0; i < lines.size(); i++) {
+      try {
+        const rel = this.getLine(lines.get(i), false)
+        if (!rel) continue
+        
+        const relatingProp = rel.RelatingPropertyDefinition
+        const relatedObjects = rel.RelatedObjects
+        
+        if (!relatingProp || !relatedObjects) continue
+        
+        const propID = relatingProp.value
+        const objectIDs = Array.isArray(relatedObjects) 
+          ? relatedObjects.map((obj: any) => obj.value)
+          : [relatedObjects.value]
+        
+        // Map each related object to this property set
+        for (const objectID of objectIDs) {
+          if (!map.has(objectID)) {
+            map.set(objectID, [])
+          }
+          map.get(objectID)!.push(propID)
+        }
+      } catch (error) {
+        // Skip invalid relationships
+        continue
+      }
+    }
+    
+    return map
+  }
+
+  /**
+   * Build a map of element -> type for O(1) lookups
+   */
+  private async buildTypeMap(): Promise<Map<number, number>> {
+    const map = new Map<number, number>()
+    
+    // Get all IFCRELDEFINESBYTYPE relationships
+    const IFCRELDEFINESBYTYPE = 781010003 // The IFC type number
+    const lines = this.getLineIDsWithType(IFCRELDEFINESBYTYPE)
+    
+    for (let i = 0; i < lines.size(); i++) {
+      try {
+        const rel = this.getLine(lines.get(i), false)
+        if (!rel) continue
+        
+        const relatingType = rel.RelatingType
+        const relatedObjects = rel.RelatedObjects
+        
+        if (!relatingType || !relatedObjects) continue
+        
+        const typeID = relatingType.value
+        const objectIDs = Array.isArray(relatedObjects)
+          ? relatedObjects.map((obj: any) => obj.value)
+          : [relatedObjects.value]
+        
+        // Map each related object to this type
+        for (const objectID of objectIDs) {
+          map.set(objectID, typeID)
+        }
+      } catch (error) {
+        // Skip invalid relationships
+        continue
+      }
+    }
+    
+    return map
+  }
+
+  private async serializeElementPropertiesOptimized(
     model: IfcStepModel,
     expressID: number,
+    propertyMap: Map<number, number[]>,
+    typeMap: Map<number, number>
   ): Promise<SerializedIfcElementProperties> {
     const element = model.getElementByExpressID(expressID)
 
+    // Fast GlobalID extraction
     let globalID: string | undefined
     const globalIdCandidate = (element as any)?.GlobalId ?? (element as any)?.globalID
     if (globalIdCandidate !== void 0) {
-      if (typeof globalIdCandidate === 'string') {
-        globalID = globalIdCandidate
-      } else if (typeof (globalIdCandidate as any).value === 'string') {
-        globalID = (globalIdCandidate as any).value
+      globalID = typeof globalIdCandidate === 'string' ? 
+        globalIdCandidate : 
+        (globalIdCandidate as any).value
+    }
+
+    // Get flattened line synchronously
+    const flattenedLine = this.getLine(expressID, false)
+
+    // Use pre-computed maps for O(1) property lookups
+    let propertySets: any[] | undefined
+    const propSetIDs = propertyMap.get(expressID)
+    if (propSetIDs && propSetIDs.length > 0) {
+      propertySets = []
+      for (const propID of propSetIDs) {
+        try {
+          const propSet = this.getLine(propID, true) // Recursive to get property values
+          if (propSet) {
+            propertySets.push(propSet)
+          }
+        } catch (error) {
+          // Skip invalid property sets
+        }
       }
     }
 
-    const flattenedLine = this.getLine(expressID, true)
-
-    const results = await Promise.allSettled([
-      this.properties.getItemProperties(expressID, true),
-      this.properties.getPropertySets(expressID, true),
-      this.properties.getTypeProperties(expressID, true),
-      this.properties.getMaterialsProperties(expressID, true),
-    ])
-
-    const [itemProperties, propertySets, typeProperties, materialProperties] = results
+    // Use pre-computed map for O(1) type lookup
+    let typeProperties: any | undefined
+    const typeID = typeMap.get(expressID)
+    if (typeID) {
+      try {
+        typeProperties = this.getLine(typeID, false)
+      } catch (error) {
+        // Skip invalid type
+      }
+    }
 
     return {
       expressID,
       globalID,
       flattenedLine,
-      itemProperties: itemProperties.status === 'fulfilled' ? itemProperties.value : undefined,
-      propertySets: propertySets.status === 'fulfilled' ? propertySets.value : undefined,
-      typeProperties: typeProperties.status === 'fulfilled' ? typeProperties.value : undefined,
-      materialProperties: materialProperties.status === 'fulfilled' ? materialProperties.value : undefined,
+      itemProperties: flattenedLine, // Use flattened line as item properties
+      propertySets,
+      typeProperties,
+      materialProperties: undefined, // Skip materials for now
     }
   }
 

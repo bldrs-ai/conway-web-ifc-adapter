@@ -165,6 +165,16 @@ export class IfcAPI {
     }
 
     this.wasmModule = this.conwaywasm.wasmModule
+    
+    // Call global callback if defined, allowing apps to initialize
+    // their own WASM modules (e.g., Conway for GLB export) after IFC WASM is ready
+    if (typeof (globalThis as any).__onIfcWasmInitialized === 'function') {
+      try {
+        (globalThis as any).__onIfcWasmInitialized(this.wasmModule)
+      } catch (error) {
+        Logger.error(`Error in __onIfcWasmInitialized callback: ${error}`)
+      }
+    }
   }
 
   /**
@@ -759,6 +769,23 @@ export class IfcAPI {
   } = {}) {
 
     return this.getPassthrough(0).getAggregatedGeometry(opts);
+  }
+
+  /**
+   * Gets the linear scaling factor for the model (converts IFC units to meters).
+   * 
+   * @param modelID handle retrieved by OpenModel
+   * @returns The linear scaling factor (e.g., 1000 for mm to m, 0.3048 for feet to m)
+   */
+  getLinearScalingFactor(modelID: number): number {
+    const result = this.models.get(modelID)
+
+    if (result === void 0) {
+      Logger.error('[getLinearScalingFactor]: model === undefined')
+      return 1 // Default to no scaling
+    }
+
+    return result.linearScalingFactor
   }
 
   getWasmModule() {

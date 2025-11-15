@@ -5,6 +5,7 @@ import { PropertiesPassthrough } from './properties_passthrough'
 export interface IfcApiModelPassthrough {
 
   properties: PropertiesPassthrough
+  linearScalingFactor: number
 
   getFlatMesh(expressID: number): FlatMesh
   loadAllGeometry(): Vector<FlatMesh>
