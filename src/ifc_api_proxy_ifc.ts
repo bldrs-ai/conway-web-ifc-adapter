@@ -388,7 +388,14 @@ export class IfcApiProxyIfc implements IfcApiModelPassthrough {
       return
     }
 
-    const lineData = FromRawLineData[rawLineData.type](rawLineData)
+    // Check if the type exists in FromRawLineData mapping
+    const typeConverter = FromRawLineData[rawLineData.type]
+    if (typeof typeConverter !== 'function') {
+      Logger.warning(`No converter function for type ${rawLineData.type}, expressID: ${expressID}`)
+      return rawLineData // Return raw data as fallback
+    }
+
+    const lineData = typeConverter(rawLineData)
     if (flatten) {
 
       this.flattenLine(lineData)
