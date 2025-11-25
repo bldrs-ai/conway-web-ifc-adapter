@@ -841,7 +841,7 @@ export class IfcApiProxyIfc implements IfcApiModelPassthrough {
 
         if (entity?.localID !== void 0) {
           if (entity?.expressID !== void 0) {
-            const mesh = meshMap.get(entity.localID)
+            const mesh = meshMap.get(entity.expressID)
             if (mesh !== void 0) {
               // set color
               const color = {
@@ -861,7 +861,7 @@ export class IfcApiProxyIfc implements IfcApiModelPassthrough {
               mesh[0].push(singlePlacedGeometry)
               mesh[1].geometries = mesh[0]
 
-              meshMap.set(entity.localID, [mesh[0], mesh[1]])
+              meshMap.set(entity.expressID, [mesh[0], mesh[1]])
 
 
             } else {
@@ -907,7 +907,7 @@ export class IfcApiProxyIfc implements IfcApiModelPassthrough {
                 expressID: entity.expressID,
               }
 
-              meshMap.set(entity.localID, [vectorOfPlacedGeometry_, singleFlatMesh])
+              meshMap.set(entity.expressID, [vectorOfPlacedGeometry_, singleFlatMesh])
             }
           }
         }
@@ -1087,7 +1087,7 @@ export class IfcApiProxyIfc implements IfcApiModelPassthrough {
 
         if (entity?.localID !== void 0) {
           if (entity?.expressID !== void 0) {
-            const mesh = meshMap.get(entity.localID)
+            const mesh = meshMap.get(entity.expressID)
             if (mesh !== void 0) {
               // set color
               const color = {
@@ -1107,7 +1107,7 @@ export class IfcApiProxyIfc implements IfcApiModelPassthrough {
               mesh[0].push(singlePlacedGeometry)
               mesh[1].geometries = mesh[0]
 
-              meshMap.set(entity.localID, [mesh[0], mesh[1]])
+              meshMap.set(entity.expressID, [mesh[0], mesh[1]])
 
 
             } else {
@@ -1153,7 +1153,7 @@ export class IfcApiProxyIfc implements IfcApiModelPassthrough {
                 expressID: entity.expressID,
               }
 
-              meshMap.set(entity.localID, [vectorOfPlacedGeometry_, singleFlatMesh])
+              meshMap.set(entity.expressID, [vectorOfPlacedGeometry_, singleFlatMesh])
             }
           }
         }
@@ -1314,7 +1314,7 @@ export class IfcApiProxyIfc implements IfcApiModelPassthrough {
 
         if (entity?.localID !== void 0) {
           if (entity?.expressID !== void 0) {
-            const mesh = meshMap.get(entity.localID)
+            const mesh = meshMap.get(entity.expressID)
             if (mesh !== void 0) {
               // set color
               const color = {
@@ -1334,7 +1334,7 @@ export class IfcApiProxyIfc implements IfcApiModelPassthrough {
               mesh[0].push(singlePlacedGeometry)
               mesh[1].geometries = mesh[0]
 
-              meshMap.set(entity.localID, [mesh[0], mesh[1]])
+              meshMap.set(entity.expressID, [mesh[0], mesh[1]])
 
 
             } else {
@@ -1380,7 +1380,7 @@ export class IfcApiProxyIfc implements IfcApiModelPassthrough {
                 expressID: entity.expressID,
               }
 
-              meshMap.set(entity.localID, [vectorOfPlacedGeometry_, singleFlatMesh])
+              meshMap.set(entity.expressID, [vectorOfPlacedGeometry_, singleFlatMesh])
             }
           }
         }
